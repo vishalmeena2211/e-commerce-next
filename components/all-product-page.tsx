@@ -23,7 +23,15 @@ import {
 } from "@/components/ui/dialog"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Pagination } from "@/components/ui/pagination"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 import { Star, Search, SlidersHorizontal } from "lucide-react"
 import Image from "next/image"
 
@@ -257,12 +265,42 @@ export default function AllProductsPage() {
               </Card>
             ))}
           </div>
-          <Pagination
-            className="mt-8"
-            currentPage={currentPage}
-            totalPages={Math.ceil(filteredProducts.length / productsPerPage)}
-            onPageChange={paginate as any}
-          />
+          <Pagination className="mt-6">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (currentPage > 1) paginate(currentPage - 1)
+                  }}
+                />
+              </PaginationItem>
+              {Array.from({ length: Math.ceil(filteredProducts.length / productsPerPage) }, (_, i) => (
+                <PaginationItem key={i}>
+                  <PaginationLink
+                    href="#"
+                    isActive={currentPage === i + 1}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      paginate(i + 1)
+                    }}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (currentPage < Math.ceil(filteredProducts.length / productsPerPage)) paginate(currentPage + 1)
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </main>
       </div>
     </div>
